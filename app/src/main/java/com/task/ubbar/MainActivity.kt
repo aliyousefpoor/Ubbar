@@ -1,4 +1,4 @@
-package com.ali.ubbar
+package com.task.ubbar
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

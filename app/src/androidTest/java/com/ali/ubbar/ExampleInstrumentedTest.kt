@@ -1,4 +1,4 @@
-package com.ali.ubbar
+package com.task.ubbar
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.ali.ubbar", appContext.packageName)
+        assertEquals("com.task.ubbar", appContext.packageName)
     }
 }
