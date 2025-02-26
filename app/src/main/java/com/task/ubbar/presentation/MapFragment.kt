@@ -144,6 +144,7 @@ class MapFragment : Fragment() {
         marker.title = "Selected Location"
         marker.snippet = "Lat: ${point.latitude}, Lon: ${point.longitude}"
         marker.infoWindow = MarkerInfoWindow(R.layout.map_fragment, mapView)
+        marker.icon = ContextCompat.getDrawable(requireContext(), R.drawable.maps_pin_black_icon)
 
         mapView.overlays.removeIf { it is Marker }
 
@@ -184,6 +185,7 @@ class MapFragment : Fragment() {
         marker.position = geoPoint
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
         marker.title = "You are here"
+        marker.icon = ContextCompat.getDrawable(requireContext(), R.drawable.maps_pin_black_icon)
         mapView.overlays.add(marker)
         mapView.setTileSource(TileSourceFactory.MAPNIK)
 
