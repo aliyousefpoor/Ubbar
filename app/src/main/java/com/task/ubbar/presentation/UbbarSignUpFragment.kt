@@ -12,15 +12,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
 import com.task.ubbar.MainActivity
 import com.task.ubbar.R
 import com.task.ubbar.utils.Utils
 import com.task.ubbar.data.model.AddressRequestModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class UbbarSignUpFragment : Fragment() {
@@ -80,10 +77,9 @@ class UbbarSignUpFragment : Fragment() {
                     ) else requireContext().getColor(R.color.invalid_input_background)
                 )
             )
-            lifecycleScope.launch {
-                delay(500)
-                viewModel.nameValue.value = text.toString()
-            }
+
+            viewModel.nameValue.value = text.toString()
+
         }
 
         lastName.doOnTextChanged { text, _, _, _ ->
@@ -96,38 +92,36 @@ class UbbarSignUpFragment : Fragment() {
                 )
             )
 
-            lifecycleScope.launch {
-                viewModel.lastNameValue.value = text.toString()
-            }
+            viewModel.lastNameValue.value = text.toString()
+
         }
 
         phone.doOnTextChanged { text, _, _, _ ->
-            phoneInput.setStartIconDrawable(if (Utils.isValidIranianPhoneNumber(text.toString())) R.drawable.check_mark_circle_icon else R.drawable.invalid_background)
+            val isValidPhoneNumber = Utils.isValidIranianPhoneNumber(text.toString())
+            phoneInput.setStartIconDrawable(if (isValidPhoneNumber) R.drawable.check_mark_circle_icon else R.drawable.invalid_background)
             phoneInput.setStartIconTintList(
                 ColorStateList.valueOf(
-                    if (Utils.isValidIranianPhoneNumber(text.toString())) requireContext().getColor(
-                        R.color.green
-                    ) else requireContext().getColor(R.color.invalid_input_background)
+                    requireContext().getColor(
+                        if (isValidPhoneNumber) R.color.green else R.color.invalid_input_background
+                    )
                 )
             )
-
-            lifecycleScope.launch {
-                viewModel.phoneValue.value = text.toString()
-            }
+            viewModel.phoneValue.value = text.toString()
+            if (isValidPhoneNumber) phoneInput.error = null
         }
 
         landLine.doOnTextChanged { text, _, _, _ ->
-            landLineInput.setStartIconDrawable(if (Utils.isValidIranLandline(text.toString())) R.drawable.check_mark_circle_icon else R.drawable.invalid_background)
+            val isValidLandLine = Utils.isValidIranLandline(text.toString())
+            landLineInput.setStartIconDrawable(if (isValidLandLine) R.drawable.check_mark_circle_icon else R.drawable.invalid_background)
             landLineInput.setStartIconTintList(
                 ColorStateList.valueOf(
-                    if (Utils.isValidIranLandline(text.toString())) requireContext().getColor(
-                        R.color.green
-                    ) else requireContext().getColor(R.color.invalid_input_background)
+                    requireContext().getColor(
+                        if (isValidLandLine) R.color.green else R.color.invalid_input_background
+                    )
                 )
             )
-            lifecycleScope.launch {
-                viewModel.landLineValue.value = text.toString()
-            }
+            viewModel.landLineValue.value = text.toString()
+            if (isValidLandLine) landLineInput.error = null
         }
 
         address.doOnTextChanged { text, _, _, _ ->
@@ -140,9 +134,7 @@ class UbbarSignUpFragment : Fragment() {
                 )
             )
 
-            lifecycleScope.launch {
-                viewModel.addressValue.value = text.toString()
-            }
+            viewModel.addressValue.value = text.toString()
         }
 
         maleTextView.setOnClickListener {
@@ -154,22 +146,27 @@ class UbbarSignUpFragment : Fragment() {
         }
 
         nextButton.setOnClickListener {
-            val addressRequestModel = AddressRequestModel(
-                address = address.text.toString(),
-                lat = 0,
-                lng = 0,
-                coordiante_mobile = phone.text.toString(),
-                coordiante_phone_number = landLine.text.toString(),
-                first_name = name.text.toString(),
-                last_name = lastName.text.toString(),
-                gender = if (isMale) "Male" else "Female"
-            )
-            val fragment = MapFragment.newInstance(addressRequestModel)
+            if (Utils.isValidIranianPhoneNumber(phone.text.toString()) && Utils.isValidIranLandline(
+                    landLine.text.toString()
+                )
+            ) {
+                val addressRequestModel = AddressRequestModel(
+                    address = address.text.toString(),
+                    lat = 0,
+                    lng = 0,
+                    coordiante_mobile = phone.text.toString(),
+                    coordiante_phone_number = landLine.text.toString(),
+                    first_name = name.text.toString(),
+                    last_name = lastName.text.toString(),
+                    gender = if (isMale) "Male" else "Female"
+                )
+                val fragment = MapFragment.newInstance(addressRequestModel)
 
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, fragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container, fragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+            } else viewModel.validatePhoneNumbers()
         }
     }
 
@@ -182,6 +179,14 @@ class UbbarSignUpFragment : Fragment() {
                 )
             )
             nextButton.isEnabled = isValid
+        }
+
+        viewModel.isValidPhoneNumber.observe(viewLifecycleOwner) { isValid ->
+            phoneInput.error = if (!isValid) "شماره موبایل وارد شده صحیح نمی باشد" else null
+        }
+
+        viewModel.isValidLandLineNumber.observe(viewLifecycleOwner) { isValid ->
+            landLineInput.error = if (!isValid) "شماره تلفن وارد شده صحیح نمی باشد" else null
         }
     }
 
