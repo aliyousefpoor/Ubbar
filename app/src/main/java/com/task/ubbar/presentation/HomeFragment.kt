@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import com.task.ubbar.MainActivity
 import com.task.ubbar.R
 
 class HomeFragment : Fragment() {
@@ -26,6 +27,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? MainActivity)?.updateToolbarTitle("صفحه اصلی")
 
         addAddress.setOnClickListener {
             val fragment = UbbarSignUpFragment()

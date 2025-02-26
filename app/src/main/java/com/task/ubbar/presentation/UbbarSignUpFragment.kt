@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
+import com.task.ubbar.MainActivity
 import com.task.ubbar.R
 import com.task.ubbar.Utils
 import com.task.ubbar.data.model.AddressRequestModel
@@ -62,6 +63,7 @@ class UbbarSignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? MainActivity)?.updateToolbarTitle("ثبت نام")
 
         setOnClicks()
     }

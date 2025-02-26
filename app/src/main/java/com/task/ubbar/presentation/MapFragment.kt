@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.task.ubbar.MainActivity
 import com.task.ubbar.R
 import com.task.ubbar.data.model.AddressRequestModel
 import com.task.ubbar.data.model.NetworkResult
@@ -25,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
@@ -55,9 +57,12 @@ class MapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? MainActivity)?.updateToolbarTitle("موقعیت روی نقشه")
+
         arguments?.getParcelable<AddressRequestModel>(AddresKey)?.let {
             addressRequestModel = it
         }
+
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -175,12 +180,12 @@ class MapFragment : Fragment() {
         mapController.setZoom(16.0) // Zoom level
         mapController.setCenter(geoPoint)
 
-        // Add marker for current location
         val marker = Marker(mapView)
         marker.position = geoPoint
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
         marker.title = "You are here"
         mapView.overlays.add(marker)
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
 
         mapView.invalidate() // Refresh map
     }

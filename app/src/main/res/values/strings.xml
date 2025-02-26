@@ -10,4 +10,9 @@
     <string name="female">خانم</string>
     <string name="enter_your_information">لطفا اطلاعات خود را وارد کنید.</string>
     <string name="name">نام</string>
+    <string name="add_address">اضافه کردن آدرس</string>
+    <string name="show_addresses">نمایش آدرس ها</string>
+    <string name="choose_location">تایید موقعیت</string>
+    <string name="choose_your_location_on_the_map">موقعیت مورد نظر خود را روی نقشه مشخص کنید.</string>
+    <string name="main_page">صفحه اصلی</string>
 </resources>
