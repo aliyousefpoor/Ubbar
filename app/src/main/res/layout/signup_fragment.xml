@@ -273,7 +273,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Submit Button -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -285,12 +284,12 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_next"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_margin="32dp"
-            android:backgroundTint="#5FE0A4"
+            android:enabled="false"
             android:padding="12dp"
             android:text="@string/next_step"
-            android:textColor="@android:color/white"
+            android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

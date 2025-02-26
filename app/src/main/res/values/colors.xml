@@ -5,5 +5,7 @@
     <color name="select_border">#025496</color>
     <color name="unselect_border">#000000</color>
     <color name="green">#0FAF15</color>
-    <color name="invalid_input_background">#F4F4F4</color>
+    <color name="invalid_input_background">#FAFAFA</color>
+    <color name="button_background">#5FE0A4</color>
+    <color name="disable_button_background">#C8C8C8</color>
 </resources>

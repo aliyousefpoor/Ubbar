@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -66,6 +67,7 @@ class UbbarSignUpFragment : Fragment() {
         (activity as? MainActivity)?.updateToolbarTitle("ثبت نام")
 
         setOnClicks()
+        setupObservers()
     }
 
     private fun setOnClicks() {
@@ -80,7 +82,7 @@ class UbbarSignUpFragment : Fragment() {
             )
             lifecycleScope.launch {
                 delay(500)
-                viewModel.name = text.toString()
+                viewModel.nameValue.value = text.toString()
             }
         }
 
@@ -95,7 +97,7 @@ class UbbarSignUpFragment : Fragment() {
             )
 
             lifecycleScope.launch {
-                viewModel.lastName = text.toString()
+                viewModel.lastNameValue.value = text.toString()
             }
         }
 
@@ -110,7 +112,7 @@ class UbbarSignUpFragment : Fragment() {
             )
 
             lifecycleScope.launch {
-                viewModel.phone = text.toString()
+                viewModel.phoneValue.value = text.toString()
             }
         }
 
@@ -124,7 +126,7 @@ class UbbarSignUpFragment : Fragment() {
                 )
             )
             lifecycleScope.launch {
-                viewModel.landLine = text.toString()
+                viewModel.landLineValue.value = text.toString()
             }
         }
 
@@ -139,7 +141,7 @@ class UbbarSignUpFragment : Fragment() {
             )
 
             lifecycleScope.launch {
-                viewModel.addressText = text.toString()
+                viewModel.addressValue.value = text.toString()
             }
         }
 
@@ -152,24 +154,34 @@ class UbbarSignUpFragment : Fragment() {
         }
 
         nextButton.setOnClickListener {
-            if (validateFields()) {
-                val addressRequestModel = AddressRequestModel(
-                    address = address.text.toString(),
-                    lat = 0,
-                    lng = 0,
-                    coordiante_mobile = phone.text.toString(),
-                    coordiante_phone_number = landLine.text.toString(),
-                    first_name = name.text.toString(),
-                    last_name = lastName.text.toString(),
-                    gender = if (isMale) "Male" else "Female"
-                )
-                val fragment = MapFragment.newInstance(addressRequestModel)
+            val addressRequestModel = AddressRequestModel(
+                address = address.text.toString(),
+                lat = 0,
+                lng = 0,
+                coordiante_mobile = phone.text.toString(),
+                coordiante_phone_number = landLine.text.toString(),
+                first_name = name.text.toString(),
+                last_name = lastName.text.toString(),
+                gender = if (isMale) "Male" else "Female"
+            )
+            val fragment = MapFragment.newInstance(addressRequestModel)
 
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, fragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
-            }
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.isFormValid.observe(viewLifecycleOwner) { isValid ->
+            nextButton.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    requireContext(),
+                    if (isValid) R.color.button_background else R.color.disable_button_background
+                )
+            )
+            nextButton.isEnabled = isValid
         }
     }
 
@@ -181,12 +193,4 @@ class UbbarSignUpFragment : Fragment() {
         femaleTextView.setBackgroundResource(if (isMale) R.drawable.unselect_female_gender_switch_bg else R.drawable.select_female_gender_switch_bg)
     }
 
-    private fun validateFields(): Boolean {
-        val name = name.text.toString()
-        val lastName = lastName.text.toString()
-        val phone = phone.text.toString()
-        val landLine = landLine.text.toString()
-        val address = address.text.toString()
-        return name.isNotEmpty() && lastName.isNotEmpty() && phone.isNotEmpty() && landLine.isNotEmpty() && address.isNotEmpty()
-    }
 }

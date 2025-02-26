@@ -2,9 +2,11 @@ package com.task.ubbar.presentation
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.task.ubbar.Utils
 import com.task.ubbar.data.model.AddressRequestModel
 import com.task.ubbar.data.model.AddressResponseModel
 import com.task.ubbar.data.model.NetworkResult
@@ -28,12 +30,32 @@ class UbbarViewModel @Inject constructor(
     val getAddressResponse: LiveData<NetworkResult<List<AddressResponseModel>?>> =
         _getAddressResponse
 
+    val nameValue = MutableLiveData<String>()
+    val lastNameValue = MutableLiveData<String>()
+    val phoneValue = MutableLiveData("")
+    val landLineValue = MutableLiveData("")
+    val addressValue = MutableLiveData<String>()
+
+    val isFormValid = MediatorLiveData<Boolean>().apply {
+        val validator = {
+            val name = nameValue.value.orEmpty().isNotEmpty()
+            val lastName = lastNameValue.value.orEmpty().isNotEmpty()
+            val phone = Utils.isValidIranianPhoneNumber(phoneValue.value.toString())
+            val landLine = Utils.isValidIranLandline(landLineValue.value.toString())
+            val address = addressValue.value.orEmpty().isNotEmpty()
+
+
+            value = name && lastName && phone && landLine && address
+        }
+
+        addSource(nameValue) { validator() }
+        addSource(lastNameValue) { validator() }
+        addSource(phoneValue) { validator() }
+        addSource(landLineValue) { validator() }
+        addSource(addressValue) { validator() }
+    }
+
     var selectPoint: GeoPoint? = null
-    var addressText: String = ""
-    var phone: String = ""
-    var landLine: String = ""
-    var name: String = ""
-    var lastName: String = ""
 
     fun setAddress(addressRequestModel: AddressRequestModel) {
         viewModelScope.launch {
@@ -46,7 +68,7 @@ class UbbarViewModel @Inject constructor(
 
     fun getAddress() {
         viewModelScope.launch {
-           getAddressesUseCase.invoke().collectLatest { result ->
+            getAddressesUseCase.invoke().collectLatest { result ->
                 Log.d("Obbbaaaar", "getAddress: $result")
                 _getAddressResponse.value = result
             }
