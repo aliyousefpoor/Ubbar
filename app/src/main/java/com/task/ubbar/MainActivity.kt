@@ -1,5 +1,6 @@
 package com.task.ubbar
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -9,11 +10,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
 import com.task.ubbar.presentation.HomeFragment
+import com.task.ubbar.utils.ConnectivityMonitorService
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var titleText: TextView
+    private lateinit var connectivityServiceIntent: Intent
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -36,6 +40,8 @@ class MainActivity : AppCompatActivity() {
             transaction.replace(R.id.fragment_container, fragment)
             transaction.commit()
         }
+        connectivityServiceIntent = Intent(this, ConnectivityMonitorService::class.java)
+        startService(Intent(this, ConnectivityMonitorService::class.java))
     }
 
     fun updateToolbarTitle(title: String) {
@@ -46,5 +52,10 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopService(connectivityServiceIntent)
     }
 }

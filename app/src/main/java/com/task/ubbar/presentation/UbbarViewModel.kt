@@ -6,7 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.task.ubbar.Utils
+import com.task.ubbar.utils.Utils
 import com.task.ubbar.data.model.AddressRequestModel
 import com.task.ubbar.data.model.AddressResponseModel
 import com.task.ubbar.data.model.NetworkResult

@@ -16,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
 import com.task.ubbar.MainActivity
 import com.task.ubbar.R
-import com.task.ubbar.Utils
+import com.task.ubbar.utils.Utils
 import com.task.ubbar.data.model.AddressRequestModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
