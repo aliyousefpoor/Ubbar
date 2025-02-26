@@ -17,6 +17,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 
@@ -29,6 +30,10 @@ object UbbarModule {
     fun provideRetrofit(): Retrofit {
         val gson: Gson? = GsonBuilder().setLenient().create()
         val client = OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)  // Increase connection timeout
+            .readTimeout(60, TimeUnit.SECONDS)     // Increase read timeout
+            .writeTimeout(60, TimeUnit.SECONDS)    // Increase write timeout
+            .retryOnConnectionFailure(true)
             .addInterceptor(ApiKeyInterceptor())
             .build()
 

@@ -10,7 +10,7 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F4F4F4"
+        android:background="@color/invalid_input_background"
         android:padding="16dp"
         android:text="@string/enter_your_information"
         android:textSize="18sp"
