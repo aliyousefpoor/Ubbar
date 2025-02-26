@@ -41,6 +41,7 @@ class UbbarViewModel @Inject constructor(
     val phoneValue = MutableLiveData("")
     val landLineValue = MutableLiveData("")
     val addressValue = MutableLiveData<String>()
+    var selectPoint: GeoPoint? = null
 
     val isFormValid = MediatorLiveData<Boolean>().apply {
         val validator = {
@@ -61,7 +62,9 @@ class UbbarViewModel @Inject constructor(
         addSource(addressValue) { validator() }
     }
 
-    var selectPoint: GeoPoint? = null
+    private val _isLocationButtonEnabled = MutableLiveData<Boolean>()
+    val isLocationButtonEnabled: LiveData<Boolean> = _isLocationButtonEnabled
+
 
     fun setAddress(addressRequestModel: AddressRequestModel) {
         viewModelScope.launch {
@@ -84,5 +87,9 @@ class UbbarViewModel @Inject constructor(
         val isValidLandLine = Utils.isValidIranLandline(landLineValue.value.toString())
         _isValidPhoneNumber.value = isValidPhone
         _isValidLandLineNumber.value = isValidLandLine
+    }
+
+    fun setLocationButtonEnabled(isEnabled: Boolean) {
+        _isLocationButtonEnabled.value = isEnabled
     }
 }

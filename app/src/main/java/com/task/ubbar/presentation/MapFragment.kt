@@ -3,6 +3,7 @@ package com.task.ubbar.presentation
 import android.Manifest
 import android.content.Context.MODE_PRIVATE
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -93,6 +94,7 @@ class MapFragment : Fragment() {
             viewModel.selectPoint = selectGeoPoint
             addressRequestModel.lat = selectGeoPoint.latitude.toLong()
             addressRequestModel.lng = selectGeoPoint.longitude.toLong()
+            viewModel.setLocationButtonEnabled(false)
             viewModel.setAddress(addressRequestModel)
         }
 
@@ -130,10 +132,24 @@ class MapFragment : Fragment() {
                     requireActivity().supportFragmentManager.popBackStack()
                 }
 
-                is NetworkResult.NetworkError -> {}
+                is NetworkResult.NetworkError -> {
+                    viewModel.setLocationButtonEnabled(true)
+                }
                 is NetworkResult.Loading -> {}
-                is NetworkResult.HttpException -> {}
+                is NetworkResult.HttpException -> {
+                    viewModel.setLocationButtonEnabled(true)
+                }
             }
+        }
+
+        viewModel.isLocationButtonEnabled.observe(viewLifecycleOwner) { isEnabled ->
+            locationButton.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    requireContext(),
+                    if (isEnabled) R.color.button_background else R.color.disable_button_background
+                )
+            )
+            locationButton.isEnabled = isEnabled
         }
     }
 

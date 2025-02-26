@@ -30,9 +30,9 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/locationButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_margin="32dp"
-        android:backgroundTint="#5FE0A4"
+        android:backgroundTint="@color/button_background"
         android:padding="12dp"
         android:text="@string/choose_location"
         android:textColor="@android:color/white"
