@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class AddressResponseModel(
-    val region: Int = 1,
+//    val region: Int = 1,
     val address: String,
     val lat: Long,
     val lng: Long,

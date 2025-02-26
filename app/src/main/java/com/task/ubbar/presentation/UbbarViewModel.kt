@@ -29,25 +29,14 @@ class UbbarViewModel @Inject constructor(
         _getAddressResponse
 
     var selectPoint: GeoPoint? = null
-    var address: String = ""
+    var addressText: String = ""
     var phone: String = ""
     var landLine: String = ""
     var name: String = ""
     var lastName: String = ""
-    val gender = "Male"
 
-    fun setAddress() {
+    fun setAddress(addressRequestModel: AddressRequestModel) {
         viewModelScope.launch {
-            val addressRequestModel = AddressRequestModel(
-                address = address,
-                lat = selectPoint?.latitude?.toLong() ?: 0,
-                lng = selectPoint?.longitude?.toLong() ?: 0,
-                coordiante_mobile = phone,
-                coordiante_phone_number = landLine,
-                first_name = name,
-                last_name = lastName,
-                gender = gender
-            )
             addAddressUseCase.invoke(addressRequestModel).collectLatest { result ->
                 Log.d("Obbbaaaar", "setAddress: $result")
                 _setAddressResponse.value = result

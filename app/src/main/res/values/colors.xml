@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="select_border">#025496</color>
+    <color name="unselect_border">#000000</color>
+    <color name="green">#0FAF15</color>
+    <color name="invalid_input_background">#F4F4F4</color>
 </resources>

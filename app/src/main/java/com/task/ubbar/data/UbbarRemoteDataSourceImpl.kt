@@ -22,7 +22,7 @@ class UbbarRemoteDataSourceImpl @Inject constructor(private val service: UbbarSe
                 emit(NetworkResult.HttpException(errorCode = result.code(), errorMessage = result.errorBody()?.string()?:result.message()))
             }
         } catch (e: Exception) {
-
+            emit(NetworkResult.NetworkError(e))
         }
     }
 
@@ -38,7 +38,7 @@ class UbbarRemoteDataSourceImpl @Inject constructor(private val service: UbbarSe
                 emit(NetworkResult.HttpException(errorCode = result.code(), errorMessage = result.errorBody()?.string()?:result.message()))
             }
         } catch (e: Exception) {
-
+            emit(NetworkResult.NetworkError(e))
         }
     }
 }

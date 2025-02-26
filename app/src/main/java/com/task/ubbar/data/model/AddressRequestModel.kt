@@ -7,8 +7,8 @@ import kotlinx.android.parcel.Parcelize
 data class AddressRequestModel(
     val region: Int = 1,
     val address: String,
-    val lat: Long,
-    val lng: Long,
+    var lat: Long,
+    var lng: Long,
     val coordiante_mobile: String,
     val coordiante_phone_number: String,
     val first_name: String,
